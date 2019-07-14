@@ -4,6 +4,8 @@ var cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const Data = require('./data');
+const fs = require('fs');
+
 
 const API_PORT = 3001;
 const app = express();
@@ -77,6 +79,20 @@ router.post('/putData', (req, res) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });
   });
+});
+
+router.get('/getBannerUrl', (req, res) => {
+  const bannersPath = "./../client/public/banner";
+  let numberOfBanners;
+
+  fs.readdir(bannersPath, 
+    (err, files) => numberOfBanners = files.length
+  );
+
+  const randomBannerNumber = Math.floor(Math.random * numberOfBanners),
+    response = res.json({ url: `banner/${randomBannerNumber}.png` });
+
+  return response; 
 });
 
 // append /api for our http requests
