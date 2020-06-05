@@ -3,15 +3,19 @@ import axios from 'axios';
 
 class Banner extends Component {
 
-    state = {
-        isLoaded: false,
-        url: "",
+    constructor() {
+        super();
+        this.state = {
+            isLoaded: false,
+            url: "",
+        }
     }
 
+
     componentDidMount() {
-        axios.get('/getBannerUrl')
+        axios.get('/api/getBannerUrl')
         .then((res) => {
-            this.setState({ url: res.url })
+            this.setState({ url: res.data.url })
         })
         .catch((error) => {
             console.log(error);
@@ -20,7 +24,7 @@ class Banner extends Component {
 
     render() {
         return (
-            <img className="banner" src="banner/0.png"></img>
+            <img className="banner" src={`${this.state.url}`}></img>
         )
     }
 }

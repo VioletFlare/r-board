@@ -6,7 +6,6 @@ const logger = require('morgan');
 const Data = require('./data');
 const fs = require('fs');
 
-
 const API_PORT = 3001;
 const app = express();
 app.use(cors());
@@ -16,7 +15,10 @@ const router = express.Router();
 const dbRoute = 'mongodb://localhost:27017/r-board-db';
 
 // connects our back end code with the database
-mongoose.connect(dbRoute, { useNewUrlParser: true });
+mongoose.connect(dbRoute, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true 
+});
 
 let db = mongoose.connection;
 
@@ -81,15 +83,13 @@ router.post('/putData', (req, res) => {
   });
 });
 
-router.get('/getBannerUrl', (req, res) => {
+router.get('/getBannerUrl', async (req, res) => {
   const bannersPath = "./../client/public/banner";
-  let numberOfBanners;
 
-  fs.readdir(bannersPath, 
-    (err, files) => numberOfBanners = files.length
-  );
+  const files = await fs.promises.readdir(bannersPath);
 
-  const randomBannerNumber = Math.floor(Math.random * numberOfBanners),
+  const numberOfBanners = files.length; 
+    randomBannerNumber = Math.floor(Math.random() * numberOfBanners),
     response = res.json({ url: `banner/${randomBannerNumber}.png` });
 
   return response; 
