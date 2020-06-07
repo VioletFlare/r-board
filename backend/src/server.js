@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const Data = require('./data');
+const Posts = require('./posts');
 const fs = require('fs');
 
 const API_PORT = 3001;
@@ -20,7 +21,7 @@ app.use(cors({
 }));
 
 // this is our MongoDB database
-const dbRoute = 'mongodb://localhost:27017/r-board-db';
+const dbRoute = 'mongodb://localhost:27017/r-board';
 
 // connects our back end code with the database
 mongoose.connect(dbRoute, { 
@@ -88,6 +89,13 @@ router.post('/putData', (req, res) => {
   data.save((err) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });
+  });
+});
+
+router.get('/getPosts', (req, res) => {
+  Posts.find((err, data) => {
+    if (err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
   });
 });
 
