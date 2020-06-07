@@ -1,15 +1,23 @@
 const mongoose = require('mongoose');
 const express = require('express');
 var cors = require('cors');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const Data = require('./data');
 const fs = require('fs');
 
 const API_PORT = 3001;
+const allowedOrigins = ["localhost"];
 const app = express();
-app.use(cors());
+
 const router = express.Router();
+
+app.use(helmet());
+
+app.use(cors({
+  origin: allowedOrigins
+}));
 
 // this is our MongoDB database
 const dbRoute = 'mongodb://localhost:27017/r-board-db';
