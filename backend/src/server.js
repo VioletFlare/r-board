@@ -92,6 +92,30 @@ router.post('/putData', (req, res) => {
   });
 });
 
+router.post('/createPost', (req, res) => {
+  const post = new Post(),
+    isTextWithinCharacterLimit = req.body.text.length > 0 && req.body.text.length <= 8000;
+    isImageValid = true;
+    isPostValid = isTextWithinCharacterLimit && isImageValid;
+
+  let resultJson;
+
+  if (isPostValid) {
+    post.text = req.body.text;
+    post.img = ["nonexistent/image.png"];
+    post.save(
+      err => resultJson = err ? {success: false, error: err} : { success: true } 
+    );
+  } else {
+    resultJson = {
+      success: false,
+      error: 'INVALID INPUTS',
+    };
+  }
+
+  return res.json(resultJson);
+});
+
 router.get('/getPosts', (req, res) => {
   Posts.find((err, data) => {
     if (err) return res.json({ success: false, error: err });

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Navbar from './Navbar';
 import Banner from './Banner';
+import Form from './Form';
 
 class Header extends Component {
     render() {
@@ -12,6 +13,7 @@ class Header extends Component {
                 <hgroup>
                     <h1>/board/ - Board</h1>
                 </hgroup>
+                <Form/>
             </header>
         )
     }
