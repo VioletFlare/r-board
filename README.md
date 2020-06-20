@@ -52,5 +52,12 @@ $ cd r-board
 $ npm run start
 ```
 
+# Development
 
+1. Install React Developer Tools extension: \
+    https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi
+2. Then, install the NPM dependency:
+    ```
+    $ npm install -g react-devtools
+    ```
 
