@@ -92,20 +92,33 @@ router.post('/putData', (req, res) => {
   });
 });
 
-router.post('/createPost', (req, res) => {
-  const post = new Post(),
-    isTextWithinCharacterLimit = req.body.text.length <= 8000,
+const savePost = async (req) => {
+  const post = new Post();
+  let resultJson;
+
+  post.text = req.body.text;
+  post.img = ["nonexistent/image.png"];
+
+  try {
+    resultJson = await post.save(
+      err => err ? {success: false, error: err} : { success: true } 
+    );
+  } catch (err) {
+    res.status(500).send(err);
+  }
+
+  return resultJson;
+}
+
+router.post('/createPost', async (req, res) => {
+  const isTextWithinCharacterLimit = req.body.text.length <= 8000,
     isImageValid = true,
     isPostValid = isTextWithinCharacterLimit && isImageValid;
 
   let resultJson;
 
   if (isPostValid) {
-    post.text = req.body.text;
-    post.img = ["nonexistent/image.png"];
-    post.save(
-      err => resultJson = err ? {success: false, error: err} : { success: true } 
-    );
+    resultJson = await savePost(req);
   } else {
     resultJson = {
       success: false,
