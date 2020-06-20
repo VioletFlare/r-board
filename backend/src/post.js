@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const PostsSchema = new Schema(
+const PostSchema = new Schema(
   {
     id: Number,
     img: [],
@@ -10,4 +10,4 @@ const PostsSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Posts", PostsSchema);
+module.exports = mongoose.model("Post", PostSchema, "Posts");

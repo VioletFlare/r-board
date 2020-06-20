@@ -5,7 +5,7 @@ const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const Data = require('./data');
-const Posts = require('./posts');
+const Post = require('./post');
 const fs = require('fs');
 
 const API_PORT = 3001;
@@ -94,8 +94,8 @@ router.post('/putData', (req, res) => {
 
 router.post('/createPost', (req, res) => {
   const post = new Post(),
-    isTextWithinCharacterLimit = req.body.text.length > 0 && req.body.text.length <= 8000;
-    isImageValid = true;
+    isTextWithinCharacterLimit = req.body.text.length <= 8000,
+    isImageValid = true,
     isPostValid = isTextWithinCharacterLimit && isImageValid;
 
   let resultJson;
@@ -109,7 +109,7 @@ router.post('/createPost', (req, res) => {
   } else {
     resultJson = {
       success: false,
-      error: 'INVALID INPUTS',
+      error: 'Invalid input.',
     };
   }
 
@@ -117,7 +117,7 @@ router.post('/createPost', (req, res) => {
 });
 
 router.get('/getPosts', (req, res) => {
-  Posts.find((err, data) => {
+  Post.find((err, data) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   });
