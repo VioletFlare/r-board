@@ -99,21 +99,16 @@ const savePost = async (req) => {
   post.text = req.body.text;
   post.img = ["nonexistent/image.png"];
 
-  try {
-    resultJson = await post.save(
-      err => err ? {success: false, error: err} : { success: true } 
-    );
-  } catch (err) {
-    res.status(500).send(err);
-  }
+  const postSavedResult = await post.save();
+  resultJson = { success: true };
 
   return resultJson;
 }
 
-router.post('/createPost', async (req, res) => {
+const validatePost = async (req) => {
   const isTextWithinCharacterLimit = req.body.text.length <= 8000,
-    isImageValid = true,
-    isPostValid = isTextWithinCharacterLimit && isImageValid;
+  isImageValid = true,
+  isPostValid = isTextWithinCharacterLimit && isImageValid;
 
   let resultJson;
 
@@ -124,6 +119,18 @@ router.post('/createPost', async (req, res) => {
       success: false,
       error: 'Invalid input.',
     };
+  }
+
+  return resultJson;
+}
+
+router.post('/createPost', async (req, res) => {
+  let resultJson;
+
+  try {
+    resultJson = await validatePost(req);
+  } catch (err) {
+    res.status(500).send(err);
   }
 
   return res.json(resultJson);
