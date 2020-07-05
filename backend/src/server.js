@@ -99,7 +99,7 @@ const savePost = async (req) => {
   post.text = req.body.text;
   post.img = ["nonexistent/image.png"];
 
-  const postSavedResult = await post.save();
+  await post.save();
   resultJson = { success: true };
 
   return resultJson;
